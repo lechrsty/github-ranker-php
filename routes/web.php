@@ -17,5 +17,6 @@ use App\Http\Controllers\RepositoryController;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('repositories',  [RepositoryController::class, 'fetch']);
-Route::get('/refresh', [RepositoryController::class, 'refresh']);
+Route::get('repositories',  [RepositoryController::class, 'fetch'])->name('repositories');
+Route::post('/repositories/refresh', [RepositoryController::class, 'refresh'])->name('repositories.refresh');
+Route::get('/repositories/{id}', [RepositoryController::class, 'show'])->name('repositories.show');
