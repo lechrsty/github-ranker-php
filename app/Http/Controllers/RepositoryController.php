@@ -10,12 +10,16 @@ class RepositoryController extends Controller
     public function fetch()
     {
         /**
-         * Retrieve and display GitHub's most starred PHP repositories in descending order.
+         * Retrieve and display GitHub's most starred PHP repositories in descending order
          */
 
+         // Set the GitHub API token
         $token = env('GITHUB_API_TOKEN');
+
+        // Create a new GuzzleHttp client
         $client = new Client();
 
+        // Send a GET request to the GitHub API to fetch the repositories
         $response = $client->get('https://api.github.com/search/repositories', [
             'query' => [
                 'q' => 'language:php',
@@ -28,11 +32,15 @@ class RepositoryController extends Controller
             ],
         ]);
 
-        $repositories = json_decode($response->getBody(), true);
+        // Decode the response body and store the data in a variable
+        $data = json_decode($response->getBody(), true);
+
+        // Clear the existing data in the 'repositories' table
+        Repository::truncate();
 
         // For each repository, create a new instance of the 'Repository' model and save it to the database
 
-        foreach ($repositories['items'] as $repository) {
+        foreach ($data['items'] as $repository) {
             $repo = new Repository;
             $repo->repository_id = $repository['id'];
             $repo->name = $repository['name'];
@@ -44,8 +52,25 @@ class RepositoryController extends Controller
             $repo->save();
         }
 
-        // Process and return the retrieved repositories 
-        return $repositories;
+        // Retrieve the repositories from the database
+        $repositories = Repository::all();
+
+
+        // Pass repositories to the Blade view and return the view
+        return view('repositories', ['repositories' => $repositories]);
+    }
+
+    public function show($id)
+    {
+        /**
+         * Display repository details view
+         */
+
+        // Locate the repository by its ID
+        $repository = Repository::findOrFail($id);
+    
+        // Return the 'repository-details' view and pass the 'repository' variable to it
+        return view('repository-details', compact('repository'));
     }
 
     public function refresh()
@@ -53,10 +78,14 @@ class RepositoryController extends Controller
         /**
          * Fetch the latest repositories from GitHub and update the database
          */
-
+    
+        // Clear the existing data in the repositories table
+        Repository::truncate();
+    
+        // Fetch the latest repositories and save them to the database
         $this->fetch();
-
-        // Return a response indicating that the refresh process was successful
-        return response()->json(['message' => 'Database refreshed successfully']);
+    
+        // Redirect to the same page after the refresh process is completed
+        return redirect()->route('repositories');
     }
 }
