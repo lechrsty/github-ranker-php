@@ -17,6 +17,12 @@ use App\Http\Controllers\RepositoryController;
 Route::get('/', function () {
     return view('welcome');
 });
+
 Route::get('repositories',  [RepositoryController::class, 'fetch'])->name('repositories');
 Route::post('/repositories/refresh', [RepositoryController::class, 'refresh'])->name('repositories.refresh');
 Route::get('/repositories/{id}', [RepositoryController::class, 'show'])->name('repositories.show');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
