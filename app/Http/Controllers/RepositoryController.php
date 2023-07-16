@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use GuzzleHttp\Client;
 use App\Models\Repository;
+use Illuminate\Http\Request;
 
 class RepositoryController extends Controller
 {
     public function fetch()
     {
         /**
-         * Retrieve and display GitHub's most starred PHP repositories in descending order
+         * Retrieve and display GitHub's most starred PHP repositories in descending order.
          */
 
          // Set the GitHub API token
@@ -39,7 +40,6 @@ class RepositoryController extends Controller
         Repository::truncate();
 
         // For each repository, create a new instance of the 'Repository' model and save it to the database
-
         foreach ($data['items'] as $repository) {
             $repo = new Repository;
             $repo->repository_id = $repository['id'];
@@ -55,28 +55,27 @@ class RepositoryController extends Controller
         // Retrieve the repositories from the database
         $repositories = Repository::all();
 
-
         // Pass repositories to the Blade view and return the view
-        return view('repositories', ['repositories' => $repositories]);
+        return view('pages.repositories', ['repositories' => $repositories]);
     }
 
     public function show($id)
     {
         /**
-         * Display repository details view
+         * Display repository details view.
          */
 
         // Locate the repository by its ID
         $repository = Repository::findOrFail($id);
     
         // Return the 'repository-details' view and pass the 'repository' variable to it
-        return view('repository-details', compact('repository'));
+        return view('pages.repository-details', compact('repository'));
     }
 
     public function refresh()
     {
         /**
-         * Fetch the latest repositories from GitHub and update the database
+         * Fetch the latest repositories from GitHub and update the database.
          */
     
         // Clear the existing data in the repositories table
