@@ -15,7 +15,7 @@
                         </svg>
                         </a>
                         <li><a href="/repositories" class="nav-link px-2 link-dark"><h1>Top GitHub PHP Repositories</h1></a></li>
-                        @if(Request::is('repositories'))
+                        @if(Request::is('repositories') || Request::is('/'))
                         <li> 
                             <form action="{{ route('repositories.refresh') }}" method="POST">
                                 @csrf
