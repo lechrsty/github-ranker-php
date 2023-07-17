@@ -18,7 +18,7 @@
                 <td>{{ $repository->name }}</td>
                 <td>{{ $repository->stars }}</td>
                 <td>
-                    <a href="{{ route('repositories.show', ['id' => $repository->id]) }}" class="btn btn-info text-light">View Details</a>
+                    <a href="{{ route('repositories.details', ['id' => $repository->id]) }}" class="btn btn-info text-light">View Details</a>
                 </td>
             </tr>
             @endforeach
