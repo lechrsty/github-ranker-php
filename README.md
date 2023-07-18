@@ -12,8 +12,8 @@ ___
 `cd /path/to/project`
 5. Copy the .env.example file to .env \
 `cp .env.example .env`
-6. Install composer dependencies \
-`composer require laravel/sail laravel/ui && php artisan sail:install && php artisan ui bootstrap && npm install && npm run dev`
+6. Install composer dependencies with Laravel sail \
+`composer require laravel/sail --dev && php artisan sail:install`
 7. After the command is finished running in your terminal, select [0] for MySQL to install MySQL 
 8. Ensure that a docker-compose.yml file was created at the root of the project. If the file is created, run the following command to build and run the needed containers \
 `COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 ./vendor/bin/sail build`
@@ -39,7 +39,10 @@ GITHUB_API_TOKEN={enter token, without curly braces}
 ```
 13. Run database migrations. \
 `./vendor/bin/sail artisan migrate`
-14. Navigate to `localhost` in your browser of choice.
+14. Install Bootstrap, Laravel UI, and npm dependencies. Do not replace any existing files with incoming ones. \
+`composer require laravel/ui && php artisan ui bootstrap --auth && npm install`
+`npm run dev`
+15. Navigate to `localhost` in your browser of choice.
 ___
 
 ## Helpful Links
